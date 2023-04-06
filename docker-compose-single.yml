@@ -1,0 +1,22 @@
+# Author: ANJOU Raphaël
+# Company: Orange Business
+# Year: 2023
+# Project: Traefik Demo
+
+version: '3.9'
+
+networks:
+  traefik-net:
+    external: true
+
+services:
+  whoami-single:
+    container_name: whoami-single
+    image: traefik/whoami:latest
+    networks:
+      - traefik-net
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami-single.entrypoints=web
+      - traefik.http.routers.whoami-single.rule=Host(`localhost`)
+      - traefik.http.routers.whoami-single.rule=PathPrefix(`/single`)    

@@ -1,0 +1,36 @@
+# Author: ANJOU Raphaël
+# Company: Orange Business
+# Year: 2023
+# Project: Traefik Demo
+
+version: '3.9'
+
+networks:
+  traefik-net:
+    external: true
+
+services:
+  traefik:
+    container_name: traefik
+    image: traefik:v2.9
+    networks:
+      - traefik-net
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      # - "443:443"
+      - "8080:8080" # To remove when in production
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # - ./letsencrypt:/letsencrypt
+      - ./logs:/var/log/traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.rule=Host(`traefik.localhost`)
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+      # - traefik.http.routers.traefik.tls=true
+      # - traefik.http.routers.traefik.tls.certresolver=cloudflare
+      # Middleware
+      - traefik.http.middlewares.custom_name.headers.customresponseheaders.i_am_custom=raphaelanjou
+    

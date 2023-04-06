@@ -1,0 +1,23 @@
+# Author: ANJOU Raphaël
+# Company: Orange Business
+# Year: 2023
+# Project: Traefik Demo
+
+version: '3.9'
+
+networks:
+  traefik-net:
+    external: true
+
+services:
+  whoami-middleware:
+    container_name: whoami-middleware
+    image: traefik/whoami:latest
+    networks:
+      - traefik-net
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami-middleware.entrypoints=web
+      - traefik.http.routers.whoami-middleware.rule=Host(`localhost`)
+      - traefik.http.routers.whoami-middleware.rule=PathPrefix(`/middleware`)
+      - "traefik.http.routers.whoami-middleware.middlewares=custom_name@docker"

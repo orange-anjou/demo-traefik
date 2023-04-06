@@ -1,0 +1,74 @@
+# Author: ANJOU Raphaël
+# Company: Orange Business
+# Year: 2023
+# Project: Traefik Demo
+
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+# (Optional) Log information
+# ---
+log:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR(Default), CRITICAL
+  format: common  # common, json, logfmt
+  filePath: /var/log/traefik/traefik.log
+
+# (Optional) Accesslog
+# ---
+accessLog:
+  filePath: /var/log/traefik/access.log
+  format: json
+  fields:
+    defaultMode: keep
+    headers:
+      defaultMode: keep
+      names:
+          User-Agent: keep
+          Authorization: keep
+          Content-Type: keep
+
+# (Optional) Enable API and Dashboard
+# ---
+api:
+  dashboard: true  # false for production or don't expose port for production
+  insecure: true  # false for production
+
+# Entry Points configuration
+# ---
+entryPoints:
+  web:
+    address: :80
+
+    # http:
+      # redirections:
+      #   entryPoint:
+      #     to: websecure
+      #    scheme: https
+
+  # websecure:
+  #   address: :443
+
+# Configure your CertificateResolver here...
+# ---
+# certificatesResolvers:
+#   cloudflare:
+#     acme:
+#       email: raphael.anjou@orange.com
+#       storage: /letsencrypt/acme.json
+#       caServer: "https://acme-v02.api.letsencrypt.org/directory"
+#       httpChallenge:
+#         entryPoint: web
+
+# (Optional) Disable TLS version 1.0 and 1.1
+#   options:
+#     default:
+#       minVersion: VersionTLS12
+
+providers:
+  docker:
+    exposedByDefault: false
+  file:
+    # watch for dynamic configuration changes
+    directory: /etc/traefik
+    watch: true
