@@ -16,7 +16,7 @@ services:
     # container-name: DO-NOT
     image: traefik/whoami:latest
     ports:
-      - "8000-8010:80"
+      - "8000-8002:80"
     networks:
       - traefik-net
     labels:
@@ -24,4 +24,4 @@ services:
       - traefik.http.services.whoami-replicate.loadbalancer.server.port=80
       - traefik.http.routers.whoami-replicate.rule=Host(`replicas.localhost`)
     deploy:
-      replicas: 11
+      replicas: 3
